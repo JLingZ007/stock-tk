@@ -19,6 +19,9 @@ import {
   Minus,
   Pencil,
   Trash2,
+  TrendingUp,
+  AlertTriangle,
+  BarChart3,
 } from "lucide-react";
 import CategoryModal from "@/components/CategoryModal";
 import CreateProductModal from "@/components/CreateProductModal";
@@ -87,6 +90,14 @@ export default function DashboardPage() {
     });
   };
 
+  // Statistics for dashboard overview
+  const stats = {
+    total: products.length,
+    lowStock: products.filter(p => p.quantity <= 5).length,
+    outOfStock: products.filter(p => p.quantity === 0).length,
+    totalValue: products.reduce((sum, p) => sum + (p.quantity || 0), 0)
+  };
+
   return (
     <>
       <CategoryModal isOpen={showCategoryModal} onClose={() => setShowCategoryModal(false)} />
@@ -100,107 +111,243 @@ export default function DashboardPage() {
         product={editProduct}
       />
 
-      <div className="flex min-h-screen">
-        <aside className="w-64 bg-blue-900 text-white p-6 space-y-4">
-          <h2 className="text-xl font-bold mb-4">📦 Stock Menu</h2>
-          <button onClick={() => setShowProductModal(true)} className="w-full flex items-center gap-2 bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded">
-            <Plus className="w-5 h-5" /> <span>เพิ่มสินค้า</span>
-          </button>
-          <button onClick={() => setShowCategoryModal(true)} className="w-full flex items-center gap-2 bg-green-700 hover:bg-green-600 px-4 py-2 rounded">
-            <PlusCircle className="w-5 h-5" /> <span>เพิ่มหมวดหมู่</span>
-          </button>
-          <button onClick={() => router.push("/history")} className="w-full flex items-center gap-2 bg-purple-700 hover:bg-purple-600 px-4 py-2 rounded">
-            <FileClock className="w-5 h-5" /> <span>ประวัติการทำรายการ</span>
-          </button>
+      <div className="flex min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/20">
+        {/* Enhanced Sidebar */}
+        <aside className="w-72 bg-gradient-to-b from-slate-800 via-slate-900 to-slate-800 text-white shadow-2xl">
+          <div className="p-6 border-b border-slate-700/50">
+            <div className="flex items-center gap-3 mb-2">
+              <div className="p-2 bg-gradient-to-br from-blue-600 to-indigo-600 rounded-xl shadow-lg">
+                <Package className="w-6 h-6 text-white" />
+              </div>
+              <h2 className="text-xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
+                Stock Management
+              </h2>
+            </div>
+            <p className="text-slate-400 text-sm">ระบบจัดการคลังสินค้า</p>
+          </div>
+
+          {/* Stats Summary in Sidebar */}
+          <div className="p-6 border-b border-slate-700/50">
+            <h3 className="text-sm font-semibold text-slate-300 mb-4 flex items-center gap-2">
+              <BarChart3 className="w-4 h-4" />
+              สถิติรวม
+            </h3>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-xl">
+                <span className="text-slate-300 text-sm">สินค้าทั้งหมด</span>
+                <span className="text-blue-400 font-bold">{stats.total}</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-xl">
+                <span className="text-slate-300 text-sm">สต็อกต่ำ</span>
+                <span className="text-amber-400 font-bold">{stats.lowStock}</span>
+              </div>
+              <div className="flex items-center justify-between p-3 bg-slate-700/30 rounded-xl">
+                <span className="text-slate-300 text-sm">หมดสต็อก</span>
+                <span className="text-red-400 font-bold">{stats.outOfStock}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Navigation Menu */}
+          <nav className="p-6 space-y-3">
+            <button 
+              onClick={() => setShowProductModal(true)} 
+              className="group w-full flex items-center gap-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 px-4 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg shadow-blue-600/25 hover:shadow-blue-600/40 hover:shadow-xl"
+            >
+              <Plus className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" /> 
+              <span>เพิ่มสินค้าใหม่</span>
+            </button>
+            
+            <button 
+              onClick={() => setShowCategoryModal(true)} 
+              className="group w-full flex items-center gap-3 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 px-4 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg shadow-green-600/25 hover:shadow-green-600/40 hover:shadow-xl"
+            >
+              <PlusCircle className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" /> 
+              <span>จัดการหมวดหมู่</span>
+            </button>
+            
+            <button 
+              onClick={() => router.push("/history")} 
+              className="group w-full flex items-center gap-3 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-4 py-3 rounded-xl font-medium transition-all duration-200 shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 hover:shadow-xl"
+            >
+              <FileClock className="w-5 h-5 group-hover:scale-110 transition-transform duration-200" /> 
+              <span>ประวัติการทำรายการ</span>
+            </button>
+          </nav>
         </aside>
 
-        <main className="flex-1 p-6 bg-gray-100">
-          <h1 className="text-2xl font-semibold mb-6 flex items-center gap-2">
-            <Package className="w-6 h-6 text-blue-700" /> รายการสินค้า
-          </h1>
+        <main className="flex-1 p-8">
+          {/* Enhanced Header */}
+          <div className="mb-4">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent mb-2 flex items-center gap-3">
+              <Package className="w-8 h-8 text-blue-600" /> 
+              รายการสินค้าในคลัง
+            </h1>
+          </div>
 
-          <SearchFilter search={search} setSearch={setSearch} category={category} setCategory={setCategory} />
+          {/* Enhanced Search Filter */}
+          <div className="mb-3">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 pb-0 shadow-sm border border-slate-200/50">
+              <SearchFilter 
+                search={search} 
+                setSearch={setSearch} 
+                category={category} 
+                setCategory={setCategory} 
+              />
+            </div>
+          </div>
 
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-            <div className="overflow-x-auto overflow-y-auto max-h-[calc(115vh-280px)]">
+          {/* Enhanced Table Container */}
+          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-slate-200/50 overflow-hidden">
+            <div className="overflow-x-auto overflow-y-auto max-h-[calc(150vh-400px)]">
               <table className="min-w-full table-auto text-sm">
-                <thead className="bg-gray-200 text-gray-700 sticky top-0 z-10">
+                <thead className="bg-gradient-to-r from-slate-100 to-blue-100/50 text-slate-700 sticky top-0 z-10 backdrop-blur-sm">
                   <tr>
-                    <th className="px-4 py-3 text-left font-semibold">รูปสินค้า</th>
-                    <th className="px-4 py-3 text-left font-semibold">ชื่อสินค้า</th>
-                    <th className="px-4 py-3 text-left font-semibold">จำนวน</th>
-                    <th className="px-4 py-3 text-left font-semibold">อัปเดตล่าสุด</th>
-                    <th className="px-4 py-3 text-left font-semibold">การจัดการ</th>
+                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">รูปสินค้า</th>
+                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">ชื่อสินค้า</th>
+                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">จำนวนคงเหลือ</th>
+                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">อัปเดตล่าสุด</th>
+                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">การจัดการ</th>
                   </tr>
                 </thead>
                 <tbody>
                   {loading ? (
                     [...Array(5)].map((_, i) => (
-                      <tr key={i} className="border-b animate-pulse">
-                        <td className="px-4 py-3"><div className="w-16 h-16 bg-gray-200 rounded" /></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-gray-200 rounded w-3/4" /></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-gray-200 rounded w-1/3" /></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-gray-200 rounded w-2/3" /></td>
-                        <td className="px-4 py-3"><div className="h-4 bg-gray-200 rounded w-1/2" /></td>
+                      <tr key={i} className="border-b border-slate-200 animate-pulse">
+                        <td className="px-6 py-4">
+                          <div className="w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-xl" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="h-5 bg-slate-200 rounded-lg w-3/4 mb-2" />
+                          <div className="h-4 bg-slate-200 rounded-lg w-1/2" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="h-6 bg-slate-200 rounded-full w-16" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="h-4 bg-slate-200 rounded-lg w-2/3" />
+                        </td>
+                        <td className="px-6 py-4">
+                          <div className="flex gap-2">
+                            <div className="h-8 bg-slate-200 rounded-lg w-16" />
+                            <div className="h-8 bg-slate-200 rounded-lg w-16" />
+                            <div className="h-8 bg-slate-200 rounded-lg w-16" />
+                            <div className="h-8 bg-slate-200 rounded-lg w-16" />
+                          </div>
+                        </td>
                       </tr>
                     ))
                   ) : filtered.length === 0 ? (
                     <tr>
-                      <td colSpan="5" className="text-center px-4 py-8 text-gray-500">
-                        <div className="flex flex-col items-center gap-2">
-                          <Package className="w-12 h-12 text-gray-300" />
-                          <span>ไม่พบสินค้าที่ค้นหา</span>
+                      <td colSpan="5" className="text-center px-6 py-16 text-slate-500">
+                        <div className="flex flex-col items-center gap-4">
+                          <div className="p-6 bg-slate-100/50 rounded-full">
+                            <Package className="w-16 h-16 text-slate-400" />
+                          </div>
+                          <div>
+                            <h3 className="text-lg font-semibold text-slate-600 mb-2">ไม่พบสินค้าที่ค้นหา</h3>
+                            <p className="text-slate-500">ลองเปลี่ยนคำค้นหาหรือปรับตัวกรองใหม่</p>
+                          </div>
                         </div>
                       </td>
                     </tr>
                   ) : (
-                    filtered.map((product) => (
-                      <tr key={product.id} className="border-b hover:bg-gray-50 transition-colors">
-                        <td className="px-4 py-2">
-  {product.image ? (
-    <img
-      src={product.image}
-      alt={product.name}
-      className="w-16 h-16 object-cover rounded"
-      loading="lazy"
-    />
-  ) : (
-    <div className="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
-                              <span className="text-gray-400 text-xs">ไม่มีรูป</span>
-                            </div>
-  )}
-</td>
-                        <td className="px-4 py-3 font-medium">{product.name}</td>
-                        <td className="px-4 py-3">
-                          <span className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                            product.quantity > 10
-                              ? "bg-green-100 text-green-800"
-                              : product.quantity > 0
-                              ? "bg-yellow-100 text-yellow-800"
-                              : "bg-red-100 text-red-800"
-                          }`}>
-                            {product.quantity}
-                          </span>
+                    filtered.map((product, index) => (
+                      <tr key={product.id} className={`border-b border-slate-200 hover:bg-slate-50/50 transition-all duration-200 ${index % 2 === 0 ? 'bg-white/50' : 'bg-slate-50/30'}`}>
+                        <td className="px-6 py-4">
+                          <div className="relative">
+                            {product.image ? (
+                              <img
+                                src={product.image}
+                                alt={product.name}
+                                className="w-16 h-16 object-cover rounded-xl shadow-sm hover:shadow-md transition-shadow duration-200"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <div className="w-20 h-20 bg-gradient-to-br from-slate-200 to-slate-300 rounded-xl flex items-center justify-center shadow-sm">
+                                <Package className="w-8 h-8 text-slate-400" />
+                              </div>
+                            )}
+                            
+                            {/* Quick Stock Indicator */}
+                            <div className={`absolute -top-1 -right-1 w-4 h-4 rounded-full border-2 border-white ${
+                              product.quantity > 10 ? 'bg-green-500' : 
+                              product.quantity > 0 ? 'bg-amber-500' : 'bg-red-500'
+                            }`} />
+                          </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">
-                          {product.updatedAt?.toDate().toLocaleString("th-TH", {
-                            dateStyle: "medium",
-                            timeStyle: "short",
-                          }) ?? "-"}
+                        
+                        <td className="px-6 py-4">
+                          <div>
+                            <h3 className="font-semibold text-slate-800 mb-1">{product.name}</h3>
+                            
+                          </div>
                         </td>
-                        <td className="px-4 py-3">
+                        
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-2">
+                            <span className={`inline-flex items-center px-3 py-1.5 rounded-xl text-sm font-semibold ${
+                              product.quantity > 10
+                                ? "bg-green-100 text-green-700 border border-green-200"
+                                : product.quantity > 0
+                                ? "bg-amber-100 text-amber-700 border border-amber-200"
+                                : "bg-red-100 text-red-700 border border-red-200"
+                            }`}>
+                              {product.quantity}
+                              <span className="ml-1 text-xs opacity-75">ชิ้น</span>
+                            </span>
+                            
+                            {product.quantity <= 5 && product.quantity > 0 && (
+                              <AlertTriangle className="w-4 h-4 text-amber-500" />
+                            )}
+                            {product.quantity === 0 && (
+                              <AlertTriangle className="w-4 h-4 text-red-500" />
+                            )}
+                          </div>
+                        </td>
+                        
+                        <td className="px-6 py-4 text-slate-600">
+                          <div className="bg-slate-50 px-2 py-1 rounded-lg text-xs">
+                            {product.updatedAt?.toDate().toLocaleString("th-TH", {
+                              dateStyle: "medium",
+                              timeStyle: "short",
+                            }) ?? "-"}
+                          </div>
+                        </td>
+                        
+                        <td className="px-6 py-4">
                           <div className="flex gap-2 flex-wrap">
-                            <button onClick={() => handleIncrease(product.id)} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1">
-                              <Plus className="w-3 h-3" /> เพิ่ม
+                            <button 
+                              onClick={() => handleIncrease(product.id)} 
+                              className="group bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all duration-200 shadow-sm hover:shadow-md"
+                            >
+                              <Plus className="w-3 h-3 group-hover:scale-110 transition-transform duration-200" /> 
+                              เพิ่ม
                             </button>
-                            <button onClick={() => handleDecrease(product.id)} className="bg-yellow-500 hover:bg-yellow-600 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1">
-                              <Minus className="w-3 h-3" /> เบิก
+                            
+                            <button 
+                              onClick={() => handleDecrease(product.id)} 
+                              disabled={product.quantity <= 0}
+                              className="group bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 disabled:from-slate-300 disabled:to-slate-400 disabled:cursor-not-allowed text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all duration-200 shadow-sm hover:shadow-md disabled:shadow-none"
+                            >
+                              <Minus className="w-3 h-3 group-hover:scale-110 transition-transform duration-200" /> 
+                              เบิก
                             </button>
-                            <button onClick={() => { setEditProduct(product); setShowEditModal(true); }} className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1">
-                              <Pencil className="w-3 h-3" /> แก้ไข
+                            
+                            <button 
+                              onClick={() => { setEditProduct(product); setShowEditModal(true); }} 
+                              className="group bg-gradient-to-r from-blue-500 to-indigo-500 hover:from-blue-600 hover:to-indigo-600 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all duration-200 shadow-sm hover:shadow-md"
+                            >
+                              <Pencil className="w-3 h-3 group-hover:scale-110 transition-transform duration-200" /> 
+                              แก้ไข
                             </button>
-                            <button onClick={() => handleDelete(product.id)} className="bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded text-xs font-medium flex items-center gap-1">
-                              <Trash2 className="w-3 h-3" /> ลบ
+                            
+                            <button 
+                              onClick={() => handleDelete(product.id)} 
+                              className="group bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white px-3 py-2 rounded-lg text-xs font-semibold flex items-center gap-1 transition-all duration-200 shadow-sm hover:shadow-md"
+                            >
+                              <Trash2 className="w-3 h-3 group-hover:scale-110 transition-transform duration-200" /> 
+                              ลบ
                             </button>
                           </div>
                         </td>
