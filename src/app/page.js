@@ -400,22 +400,22 @@ export default function DashboardPage() {
               <table className="min-w-full table-auto text-sm">
                 <thead className="bg-gradient-to-r from-slate-100 to-blue-100/50 text-slate-700 sticky top-0 z-10 backdrop-blur-sm">
                   <tr>
-                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-semibold border-b border-slate-200">
                       รูปสินค้า
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-semibold border-b border-slate-200">
                       ชื่อสินค้า
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-semibold border-b border-slate-200">
                       หมวดหมู่
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-semibold border-b border-slate-200">
                       จำนวนคงเหลือ
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-semibold border-b border-slate-200">
                       อัปเดตล่าสุด
                     </th>
-                    <th className="px-6 py-4 text-left font-semibold border-b border-slate-200">
+                    <th className="px-5 py-3 text-left font-semibold border-b border-slate-200">
                       การจัดการ
                     </th>
                   </tr>
@@ -519,7 +519,7 @@ export default function DashboardPage() {
                         </td>
 
                         <td className="px-6 py-4">
-                          <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
+                          <span className="inline-flex items-center px-2 py-1 rounded-lg text-xs font-medium bg-blue-100 text-blue-700 border border-blue-200">
                             {getCategoryName(product.categoryId)}
                           </span>
                         </td>

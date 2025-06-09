@@ -98,7 +98,7 @@ export default function CreateProductModal({ isOpen, onClose }) {
   return (
     <div className="fixed inset-0 z-50 bg-black/30 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg w-full max-w-md shadow-lg">
-        <div className="flex items-center justify-between p-4 border-b">
+        <div className="flex items-center justify-between p-4 ">
           <h2 className="text-lg font-medium">เพิ่มสินค้าใหม่</h2>
           <button
             onClick={handleClose}
@@ -194,7 +194,7 @@ export default function CreateProductModal({ isOpen, onClose }) {
           </div>
         </div>
 
-        <div className="flex gap-2 p-4 border-t bg-gray-50">
+        <div className="flex gap-2 p-4  bg-gray-50 rounded-lg">
           <button
             onClick={handleClose}
             disabled={isSubmitting}
